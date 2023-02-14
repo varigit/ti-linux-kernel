@@ -243,6 +243,8 @@ properties:
       - samsung,ltn140at29-301
         # Satoz SAT050AT40H12R2 5.0" WVGA TFT LCD panel
       - satoz,sat050at40h12r2
+        # Solomon Goldentek Display GKTW70SDAE4SE 7" WVGA LVDS TFT LCD panel
+      - sgd,gktw70sdae4se
         # Sharp LQ035Q7DB03 3.5" QVGA TFT LCD panel
       - sharp,lq035q7db03
         # Sharp LQ070Y3DG3B 7.0" WVGA landscape TFT LCD panel
