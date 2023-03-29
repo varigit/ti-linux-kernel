@@ -146,7 +146,7 @@ static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
 	if (soc_data->features & BIT(PHY_GMII_SEL_RGMII_ID_MODE) &&
 	    if_phy->fields[PHY_GMII_SEL_RGMII_ID_MODE]) {
 		regfield = if_phy->fields[PHY_GMII_SEL_RGMII_ID_MODE];
-		ret = regmap_field_write(regfield, rgmii_id);
+		ret = regmap_field_write(regfield, !rgmii_id);
 		if (ret)
 			return ret;
 	}
