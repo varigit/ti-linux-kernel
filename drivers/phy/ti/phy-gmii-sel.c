@@ -223,6 +223,7 @@ static const
 struct phy_gmii_sel_soc_data phy_gmii_sel_soc_am654 = {
 	.use_of_data = true,
 	.regfields = phy_gmii_sel_fields_am654,
+	.features = BIT(PHY_GMII_SEL_RGMII_ID_MODE),
 };
 
 static const
