@@ -1026,6 +1026,12 @@ static int rproc_handle_resources(struct rproc *rproc,
 	if (!rproc->table_ptr)
 		return 0;
 
+	if ((rproc->table_ptr->ver != 1) || (rproc->table_ptr->num != 2)) {
+		dev_warn(dev, "invalid resource table: forced to NULL\n");
+		rproc->table_ptr = NULL;
+		return 0;
+	}
+
 	for (i = 0; i < rproc->table_ptr->num; i++) {
 		int offset = rproc->table_ptr->offset[i];
 		struct fw_rsc_hdr *hdr = (void *)rproc->table_ptr + offset;
