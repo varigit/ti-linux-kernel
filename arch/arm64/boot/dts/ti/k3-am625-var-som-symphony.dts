@@ -370,12 +370,6 @@
 		>;
 	};
 
-	main_epwm2_pins_default: main-epwm2-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x01b8, PIN_OUTPUT, 2) /* (C13) SPI0_CS1.EHRPWM0_B */
-		>;
-	};
-
 	main_i2c0_pins_default: main-i2c0-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16) I2C0_SCL */
@@ -487,12 +481,6 @@
 		>;
 	};
 
-	main_wlirq_pins_default: main-wlirq-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x128, PIN_INPUT, 7) /* (B23) MMC2_SDWP.GPIO0_72 */
-		>;
-	};
-
 	ov5640_pins_default: ov5640-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x0028, PIN_OUTPUT, 7) /* (J22) OSPI0_D7.GPIO0_10 */
@@ -507,18 +495,6 @@
 		>;
 	};
 
-	restouch_pins_default: restouch-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x00c4, PIN_INPUT, 7) /* (W24) VOUT0_DATA3.GPIO0_48 */
-		>;
-	};
-
-	usr_led_pins_default: usr-led-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x244, PIN_INPUT, 7) /* (C17) MMC1_SDWP.GPIO1_49 */
-		>;
-	};
-
 	vdd_mmc1_pins_default: vdd-mmc1-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x0078, PIN_OUTPUT, 7) /* (U24) GPMC0_AD15.GPIO0_30 */
@@ -528,12 +504,6 @@
 	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x00e4, PIN_OUTPUT, 7) /* (AA23) VOUT0_DATA11.GPIO0_56 */
-		>;
-	};
-
-	wlan_en_pins_default: wlan-en-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x124, PIN_OUTPUT, 7) /* (A23) MMC2_SDCD.GPIO0_71 */
 		>;
 	};
 };
