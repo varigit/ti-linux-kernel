@@ -334,8 +334,13 @@ int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw)
 	u64 sh_offset;
 
 	shdr = find_table(dev, fw);
-	if (!shdr)
-		return -EINVAL;
+	if (!shdr) {
+		rproc->table_ptr = NULL;
+		rproc->cached_table = NULL;
+		rproc->table_sz = 0;
+		dev_warn(dev, "resource table missing: forced to NULL\n");
+		return 0;
+	}
 
 	sh_offset = elf_shdr_get_sh_offset(class, shdr);
 	table = (struct resource_table *)(elf_data + sh_offset);
