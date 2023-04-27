@@ -552,6 +552,14 @@
 	status = "okay";
 };
 
+&mcu_gpio0 {
+        status = "reserved";
+};
+
+&mcu_gpio_intr {
+        status = "reserved";
+};
+
 &mcu_i2c0 {
 	status = "disabled";
 };
