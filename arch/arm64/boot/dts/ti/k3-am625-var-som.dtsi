@@ -176,7 +176,7 @@
 	cpsw3g_phy0: ethernet-phy@4 {
 		reg = <4>;
 		compatible = "ethernet-phy-id0283.bc30";
-		reset-gpios = <&main_gpio0 46 1>;
+		reset-gpios = <&main_gpio0 46 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <10000>;
 		reset-deassert-us = <20000>;
 	};

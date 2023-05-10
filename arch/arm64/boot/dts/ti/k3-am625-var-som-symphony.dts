@@ -180,7 +180,7 @@
 	cpsw3g_phy1: ethernet-phy@5 {
 		reg = <5>;
 		compatible = "ethernet-phy-id0283.bc30";
-		reset-gpios = <&pca9534 5 1>;
+		reset-gpios = <&pca9534 5 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <10000>;
 		reset-deassert-us = <20000>;
 	};
@@ -512,7 +512,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_spi2_pins_default>;
 	ti,pindir-d0-out-d1-in = <1>;
-	cs-gpios = <&main_gpio1 13 0>;
+	cs-gpios = <&main_gpio1 13 GPIO_ACTIVE_HIGH>;
 
 	spidev@0 {
 		compatible = "var,spidev";
