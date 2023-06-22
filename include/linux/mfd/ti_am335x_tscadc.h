@@ -185,6 +185,7 @@ struct ti_tscadc_dev {
 
 	/* adc device */
 	struct adc_device *adc;
+	int idleconfig;	/* 0 if not used */
 };
 
 static inline struct ti_tscadc_dev *ti_tscadc_dev_get(struct platform_device *p)

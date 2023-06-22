@@ -115,6 +115,8 @@ static void tscadc_idle_config(struct ti_tscadc_dev *tscadc)
 
 	idleconfig = STEPCONFIG_YNN | STEPCONFIG_INM_ADCREFM |
 			STEPCONFIG_INP_ADCREFM | STEPCONFIG_YPN;
+	if (tscadc->idleconfig)
+		idleconfig = tscadc->idleconfig;
 
 	regmap_write(tscadc->regmap, REG_IDLECONFIG, idleconfig);
 }
@@ -133,6 +135,7 @@ static	int ti_tscadc_probe(struct platform_device *pdev)
 	int			clock_rate;
 	int			tsc_wires = 0, adc_channels = 0, total_channels;
 	int			readouts = 0;
+	int			idleconfig = 0;
 
 	if (!pdev->dev.of_node) {
 		dev_err(&pdev->dev, "Could not find valid DT data.\n");
@@ -142,6 +145,7 @@ static	int ti_tscadc_probe(struct platform_device *pdev)
 	node = of_get_child_by_name(pdev->dev.of_node, "tsc");
 	of_property_read_u32(node, "ti,wires", &tsc_wires);
 	of_property_read_u32(node, "ti,coordiante-readouts", &readouts);
+	of_property_read_u32(node, "ti,idle-config", &idleconfig);
 
 	node = of_get_child_by_name(pdev->dev.of_node, "adc");
 	of_property_for_each_u32(node, "ti,adc-channels", prop, cur, val) {
@@ -226,6 +230,7 @@ static	int ti_tscadc_probe(struct platform_device *pdev)
 	ctrl = CNTRLREG_STEPCONFIGWRT |	CNTRLREG_STEPID;
 	regmap_write(tscadc->regmap, REG_CTRL, ctrl);
 
+	tscadc->idleconfig = idleconfig;
 	/* Set register bits for Idle Config Mode */
 	if (tsc_wires > 0) {
 		tscadc->tsc_wires = tsc_wires;
