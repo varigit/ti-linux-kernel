@@ -37,7 +37,7 @@
 
 #define TSC_IRQENB_MASK		(IRQENB_FIFO0THRES | IRQENB_EOS | IRQENB_HW_PEN)
 
-static const int config_pins[] = {
+static int config_pins[] = {
 	STEPCONFIG_XPP,
 	STEPCONFIG_XNN,
 	STEPCONFIG_YPP,
@@ -395,6 +395,9 @@ static int titsc_parse_dt(struct platform_device *pdev,
 		ts_dev->charge_delay = CHARGEDLY_OPENDLY;
 		dev_warn(&pdev->dev, "ti,charge-delay not specified\n");
 	}
+
+	of_property_read_u32_array(node, "ti,pins-config",
+			config_pins, ARRAY_SIZE(config_pins));
 
 	return of_property_read_u32_array(node, "ti,wire-config",
 			ts_dev->config_inp, ARRAY_SIZE(ts_dev->config_inp));
