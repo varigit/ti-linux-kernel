@@ -283,18 +283,19 @@ static int k3_m4_rproc_stop(struct rproc *rproc)
 			__func__);
 		return -EINVAL;
 	}
+	if (rproc->table_sz > 0) {
+		reinit_completion(&kproc->shut_comp);
+		ret = mbox_send_message(kproc->mbox, (void *)msg);
+		if (ret < 0) {
+			dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
+			return ret;
+		}
 
-	reinit_completion(&kproc->shut_comp);
-	ret = mbox_send_message(kproc->mbox, (void *)msg);
-	if (ret < 0) {
-		dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
-		return ret;
-	}
-
-	ret = wait_for_completion_timeout(&kproc->shut_comp, to);
-	if (ret == 0) {
-		dev_err(dev, "%s: timedout waiting for rproc completion event\n", __func__);
-		return -EBUSY;
+		ret = wait_for_completion_timeout(&kproc->shut_comp, to);
+		if (ret == 0) {
+			dev_err(dev, "%s : timed out waiting for rproc completion event \n", __func__);
+			return -EBUSY;
+		};
 	};
 
 	mbox_free_channel(kproc->mbox);
