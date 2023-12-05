@@ -1004,6 +1004,12 @@ void __init early_init_dt_check_for_usable_mem_range(void)
 		memblock_add(rgn[i].base, rgn[i].size);
 }
 
+#if defined(CONFIG_CMDLINE_EXTEND_BOOTLOADER)
+static const int append_cmdline = 1;
+#else
+static const int append_cmdline;
+#endif
+
 #ifdef CONFIG_SERIAL_EARLYCON
 
 int __init early_init_dt_scan_chosen_stdout(void)
@@ -1189,6 +1195,20 @@ int __init early_init_dt_scan_chosen(char *cmdline)
 	early_init_dt_check_for_initrd(node);
 	early_init_dt_check_for_elfcorehdr(node);
 
+	/* Retrieve append command line */
+	if (append_cmdline) {
+		p = of_get_flat_dt_prop(node, "bootargs-append", &l);
+		if (p != NULL && l > 0) {
+			int cmdline_len;
+			int copy_len;
+			strlcat(cmdline, " ", COMMAND_LINE_SIZE);
+			cmdline_len = strlen(cmdline);
+			copy_len = COMMAND_LINE_SIZE - cmdline_len - 1;
+			copy_len = min((int)l, copy_len);
+			strncpy(cmdline + cmdline_len, p, copy_len);
+			cmdline[cmdline_len + copy_len] = '\0';
+		}
+	}
 	rng_seed = of_get_flat_dt_prop(node, "rng-seed", &l);
 	if (rng_seed && l > 0) {
 		add_bootloader_randomness(rng_seed, l);
