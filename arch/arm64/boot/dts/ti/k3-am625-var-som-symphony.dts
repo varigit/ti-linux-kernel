@@ -47,35 +47,28 @@
 
 	chosen {
 		stdout-path = "serial0:115200n8";
-		bootargs = "console=ttyS0,115200n8 earlycon=ns16550a,mmio32,0x02800000";
 	};
+
+	firmware {
+		status = "okay";
+		optee {
+			compatible = "linaro,optee-tz";
+			method = "smc";
+			status = "okay";
+		};
+
+		psci: psci {
+			compatible = "arm,psci-1.0";
+			method = "smc";
+			status = "okay";
+		};
+	};
+
 
 	clk_ov5640_fixed: clock {
 		#clock-cells = <0>;
 		compatible = "fixed-clock";
 		clock-frequency = <12000000>;
-	};
-
-	connector {
-		compatible = "gpio-usb-b-connector","usb-c-connector";
-		pinctrl-names = "default";
-		pinctrl-0 = <&extcon_pins_default>;
-		label = "USB-C";
-		id-gpios = <&main_gpio1 12 GPIO_ACTIVE_HIGH>;
-		status = "okay";
-
-		ports {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			port@1 {
-				reg = <1>;
-
-				usb_con_hs: endpoint {
-					remote-endpoint = <&typec_hs>;
-				};
-			};
-		};
 	};
 
 	display {
@@ -102,7 +95,7 @@
 
 		home {
 			label = "Home";
-			linux,code = <KEY_HOME>;
+			linux,code = <KEY_HOMEPAGE>;
 			gpios = <&pca9534 2 GPIO_ACTIVE_LOW>;
 			wakeup-source;
 		};
@@ -124,6 +117,28 @@
 			linux,default-trigger = "none";
 			gpios = <&pca9534 0 GPIO_ACTIVE_LOW>;
 		};
+	};
+
+	wifi_rfkill {
+		compatible = "net,rfkill-gpio";
+		pinctrl-names = "default";
+		reset-gpios = <&main_gpio0 54 GPIO_ACTIVE_HIGH>;
+		reset-delay = <150>;
+		shutdown-gpios = <&main_gpio0 59 GPIO_ACTIVE_HIGH>;
+		name = "wifi_rfkill";
+		type = "wlan";
+		status = "okay";
+        };
+
+        bt_rfkill {
+		compatible = "net,rfkill-gpio";
+		pinctrl-names = "default";
+		reset-gpios = <&main_gpio0 60 GPIO_ACTIVE_LOW>;
+		reset-delay = <150>;
+		shutdown-gpios = <&main_gpio0 53 GPIO_ACTIVE_HIGH>;
+		name = "bt_rfkill";
+		type = "bluetooth";
+		status = "okay";
 	};
 
 	ov5640_buf_en: ov5640-buf-en {
@@ -166,10 +181,12 @@
 		compatible = "ti,tcan1042";
 		#phy-cells = <0>;
 		max-bitrate = <5000000>;
+		status="okay";
 	};
 };
 
 &cpsw3g {
+	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mdio1_pins_default
 		     &main_rgmii1_pins_default
@@ -177,6 +194,7 @@
 };
 
 &cpsw3g_mdio {
+	status = "okay";
 	cpsw3g_phy1: ethernet-phy@5 {
 		reg = <5>;
 		compatible = "ethernet-phy-id0283.bc30";
@@ -189,6 +207,7 @@
 &cpsw_port2 {
 	phy-mode = "rgmii";
 	phy-handle = <&cpsw3g_phy1>;
+	status = "okay";
 };
 
 &csi0_port0 {
@@ -247,10 +266,10 @@
 };
 
 &main_mcan0 {
-	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mcan0_pins_default>;
 	phys = <&transceiver1>;
+	status = "okay";
 };
 
 &main_i2c0{
@@ -525,6 +544,7 @@
 &main_uart0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart0_pins_default>;
+	status = "okay";
 };
 
 &main_uart1 {
@@ -591,19 +611,8 @@
 };
 
 &usb0 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	usb-role-switch;
-	status="okay";
 	dr_mode = "peripheral";
-
-	port@1 {
-		reg = <1>;
-
-		typec_hs: endpoint {
-			remote-endpoint = <&usb_con_hs>;
-		};
-	};
+	status="okay";
 };
 
 &usb1 {
@@ -614,6 +623,7 @@
 };
 
 &usbss0 {
+	status = "okay";
 	ti,vbus-divider;
 };
 
@@ -639,4 +649,12 @@
 &wkup_uart0 {
 	/* WKUP UART0 is used by DM firmware */
 	status = "reserved";
+};
+
+&dphy0 {
+	status = "okay";
+};
+
+&ti_csi2rx0 {
+	status = "okay";
 };

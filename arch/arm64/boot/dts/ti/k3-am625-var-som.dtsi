@@ -37,6 +37,23 @@
 		#size-cells = <2>;
 		ranges;
 
+		ramoops@9c700000 {
+			compatible = "ramoops";
+			reg = <0x00 0x9c700000 0x00 0x00100000>;
+			record-size = <0x8000>;
+			console-size = <0x8000>;
+			ftrace-size = <0x00>;
+			pmsg-size = <0x8000>;
+		};
+
+		/* global cma region */
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x00 0x8000000>;
+			linux,cma-default;
+		};
+
 		rtos_ipc_memory_region: ipc-memories@9c800000 {
 			compatible = "shared-dma-pool";
 			reg = <0x00 0x9c800000 0x00 0x00300000>;
@@ -67,11 +84,6 @@
 			no-map;
 		};
 
-		lpm_ctx_ddr: lpm-memory@9e700000 {
-			reg = <0x00 0x9e700000 0x00 0x80000>;
-			alignment = <0x1000>;
-		};
-
 		secure_tfa_ddr: tfa@9e780000 {
 			reg = <0x00 0x9e780000 0x00 0x80000>;
 			alignment = <0x1000>;
@@ -83,6 +95,12 @@
 			alignment = <0x1000>;
 			no-map;
 		};
+
+		framebuffer: framebuffer@ff700000 {
+			reg = <0x00 0xff700000 0x00 0x008ca000>;
+			no-map;
+		};
+
 	};
 
 	emmc_pwrseq: pwrseq@0 {
@@ -170,9 +188,11 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mdio1_pins_default
 		     &main_rgmii1_pins_default>;
+	status = "okay";
 };
 
 &cpsw3g_mdio {
+	status = "okay";
 	cpsw3g_phy0: ethernet-phy@4 {
 		reg = <4>;
 		compatible = "ethernet-phy-id0283.bc30";
@@ -185,6 +205,7 @@
 &cpsw_port1 {
 	phy-mode = "rgmii";
 	phy-handle = <&cpsw3g_phy0>;
+	status = "okay";
 };
 
 &main_i2c2 {
@@ -450,4 +471,11 @@
 	status="okay";
 	ti,fails-without-test-cd;
 	non-removable;
+	keep-power-in-suspend;
+
+	brcmf: wifi@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+		laird,regdomain = "US";
+	};
 };

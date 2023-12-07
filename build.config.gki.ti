@@ -11,13 +11,9 @@ BUILD_DTBO_IMG=1
 
 FILES="${FILES}
 arch/arm64/boot/Image.lz4
-arch/arm64/boot/dts/ti/k3-am62-lp-sk.dtb
-arch/arm64/boot/dts/ti/k3-am625-sk.dtb
-arch/arm64/boot/dts/ti/k3-am625-sk-lpmdemo.dtb
+arch/arm64/boot/dts/ti/k3-am625-var-som-symphony.dtb
 "
 
 MKDTIMG_DTBOS="
-arch/arm64/boot/dts/ti/k3-am625-sk-csi2-ov5640.dtbo
-arch/arm64/boot/dts/ti/k3-am625-sk-csi2-tevi-ov5640.dtbo
-arch/arm64/boot/dts/ti/k3-am625-sk-microtips-mf101hie-panel.dtbo
+arch/arm64/boot/dts/ti/k3-am625-var-som-symphony.dtb
 "

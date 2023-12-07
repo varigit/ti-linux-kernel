@@ -4,9 +4,20 @@
   __put_task_struct
 
 # required by pvrsrvkm.ko
+  __hci_cmd_send
+  __hci_cmd_sync
+  __hci_cmd_sync_ev
+  __hci_cmd_sync_sk
+  __hci_cmd_sync_status
+  __hci_cmd_sync_status_sk
   add_timer
   __alloc_pages
   alloc_workqueue
+  alloc_can_err_skb
+  alloc_can_skb
+  alloc_candev_mqs
+  alloc_canfd_skb
+  alloc_canxl_skb
   alt_cb_patch_nops
   __arch_copy_from_user
   __arch_copy_to_user
@@ -20,6 +31,38 @@
   bpf_trace_run8
   cache_line_size
   call_rcu
+  can_eth_ioctl_hwts
+  can_bus_off
+  can_change_mtu
+  can_change_state
+  can_dropped_invalid_skb
+  can_ethtool_op_get_ts_info_hwts
+  can_fd_dlc2len
+  can_fd_len2dlc
+  can_free_echo_skb
+  can_get_echo_skb
+  can_get_state_str
+  can_proto_register
+  can_proto_unregister
+  can_put_echo_skb
+  can_rx_offload_add_fifo
+  can_rx_offload_add_manual
+  can_rx_offload_add_timestamp
+  can_rx_offload_del
+  can_rx_offload_enable
+  can_rx_offload_get_echo_skb
+  can_rx_offload_irq_finish
+  can_rx_offload_irq_offload_fifo
+  can_rx_offload_irq_offload_timestamp
+  can_rx_offload_queue_tail
+  can_rx_offload_queue_timestamp
+  can_rx_offload_threaded_irq_finish
+  can_rx_register
+  can_rx_unregister
+  can_send
+  can_skb_get_frame_len
+  can_sock_destruct
+  close_candev
   __check_object_size
   cpu_hwcaps
   cpu_number
@@ -85,6 +128,7 @@
   fortify_panic
   fput
   free_irq
+  free_candev
   __free_pages
   freezer_active
   freezing_slow_path
@@ -150,6 +194,8 @@
   mutex_lock
   mutex_trylock
   mutex_unlock
+  of_can_transceiver
+  open_candev
   param_ops_uint
   perf_trace_buf_alloc
   perf_trace_run_bpf_submit
@@ -179,11 +225,20 @@
   rcu_barrier
   refcount_warn_saturate
   __refrigerator
+  register_candev
   register_shrinker
   release_firmware
   remap_pfn_range
   request_firmware
   request_threaded_irq
+  rfkill_alloc
+  rfkill_blocked
+  rfkill_destroy
+  rfkill_register
+  rfkill_resume_polling
+  rfkill_set_hw_state_reason
+  rfkill_unregister
+  safe_candev_priv
   sched_clock
   schedule
   schedule_timeout
@@ -238,6 +293,7 @@
   try_module_get
   __udelay
   unmap_mapping_range
+  unregister_candev
   unregister_shrinker
   up_read
   up_write
