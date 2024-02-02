@@ -17,6 +17,11 @@
 #include <linux/phy/phy.h>
 #include <linux/regmap.h>
 
+static int var_rgmii_id_quirk;
+module_param(var_rgmii_id_quirk, int, 0);
+
+#define GMII_SEL_PLAT_IS_AM654(p)		(p->soc_data == &phy_gmii_sel_soc_am654)
+
 /* AM33xx SoC specific definitions for the CONTROL port */
 #define AM33XX_GMII_SEL_MODE_MII	0
 #define AM33XX_GMII_SEL_MODE_RMII	1
@@ -148,6 +153,14 @@ static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
 			return ret;
 	}
 
+	/* VAR RGMII_ID quirk fixup */
+	if (if_phy->fields[PHY_GMII_SEL_RGMII_ID_MODE]) {
+		regfield = if_phy->fields[PHY_GMII_SEL_RGMII_ID_MODE];
+		ret = regmap_field_write(regfield, var_rgmii_id_quirk ? 1 : 0);
+		if (ret)
+			return ret;
+	}
+
 	if (soc_data->features & BIT(PHY_GMII_SEL_RMII_IO_CLK_EN) &&
 	    if_phy->fields[PHY_GMII_SEL_RMII_IO_CLK_EN]) {
 		regfield = if_phy->fields[PHY_GMII_SEL_RMII_IO_CLK_EN];
@@ -210,8 +223,10 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_soc_dm814 = {
 
 static const
 struct reg_field phy_gmii_sel_fields_am654[][PHY_GMII_SEL_LAST] = {
-	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0x0, 0, 2), },
-	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0x4, 0, 2), },
+	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0x0, 0, 2),
+	  [PHY_GMII_SEL_RGMII_ID_MODE] = REG_FIELD(0x0, 4, 4), },
+	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0x4, 0, 2),
+	  [PHY_GMII_SEL_RGMII_ID_MODE] = REG_FIELD(0x4, 4, 4), },
 	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0x8, 0, 2), },
 	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0xC, 0, 2), },
 	{ [PHY_GMII_SEL_PORT_MODE] = REG_FIELD(0x10, 0, 2), },
@@ -350,7 +365,8 @@ static int phy_gmii_init_phy(struct phy_gmii_sel_priv *priv, int port,
 
 	field = *fields++;
 	field.reg += priv->reg_offset;
-	if (soc_data->features & BIT(PHY_GMII_SEL_RGMII_ID_MODE)) {
+	if (soc_data->features & BIT(PHY_GMII_SEL_RGMII_ID_MODE) ||
+	    GMII_SEL_PLAT_IS_AM654(priv)) {
 		regfield = devm_regmap_field_alloc(dev,
 						   priv->regmap,
 						   field);
