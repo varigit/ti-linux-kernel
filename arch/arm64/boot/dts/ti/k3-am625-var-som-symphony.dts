@@ -76,21 +76,18 @@
 			label = "Back";
 			linux,code = <KEY_BACK>;
 			gpios = <&pca9534 1 GPIO_ACTIVE_LOW>;
-			wakeup-source;
 		};
 
 		home {
 			label = "Home";
 			linux,code = <KEY_HOMEPAGE>;
 			gpios = <&pca9534 2 GPIO_ACTIVE_LOW>;
-			wakeup-source;
 		};
 
 		menu {
 			label = "Menu";
 			linux,code = <KEY_MENU>;
 			gpios = <&pca9534 3 GPIO_ACTIVE_LOW>;
-			wakeup-source;
 		};
 	};
 
@@ -253,7 +250,6 @@
 		interrupt-parent = <&main_gpio1>;
 		interrupts = <30 IRQ_TYPE_EDGE_FALLING>;
 		#gpio-cells = <2>;
-		wakeup-source;
 		status = "okay";
 
 		usb3_sel_hog {
