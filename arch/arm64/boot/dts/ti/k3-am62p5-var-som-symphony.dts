@@ -193,7 +193,7 @@
 		compatible = "ethernet-phy-id0283.bc30";
 		reset-gpios = <&pca9534 5 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <10000>;
-		reset-deassert-us = <20000>;
+		reset-deassert-us = <100000>;
 	};
 };
 
