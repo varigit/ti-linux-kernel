@@ -352,18 +352,20 @@ int k3_rproc_stop(struct rproc *rproc)
 	u32 stat = 0;
 	int ret;
 
-	reinit_completion(&kproc->shut_comp);
-	ret = mbox_send_message(kproc->mbox, (void *) (uintptr_t) msg);
-	if (ret < 0) {
-		dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
-		return ret;
-	}
+	if (rproc->table_sz > 0) {
+		reinit_completion(&kproc->shut_comp);
+		ret = mbox_send_message(kproc->mbox, (void *) (uintptr_t) msg);
+		if (ret < 0) {
+			dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
+			return ret;
+		}
 
-	ret = wait_for_completion_timeout(&kproc->shut_comp, to);
-	if (ret == 0) {
-		dev_err(dev, "%s: timedout waiting for rproc completion event\n", __func__);
-		return -EBUSY;
-	};
+		ret = wait_for_completion_timeout(&kproc->shut_comp, to);
+		if (ret == 0) {
+			dev_err(dev, "%s: timedout waiting for rproc completion event\n", __func__);
+			return -EBUSY;
+		};
+	}
 
 	ret = readx_poll_timeout(is_core_in_wfi, kproc, stat, stat, 200, 2000);
 	if (ret)
