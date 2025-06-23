@@ -1331,7 +1331,9 @@ MODULE_DEVICE_TABLE(of, pca953x_dt_ids);
 static struct i2c_driver pca953x_driver = {
 	.driver = {
 		.name	= "pca953x",
+#if 0
 		.pm	= pm_sleep_ptr(&pca953x_pm_ops),
+#endif
 		.of_match_table = pca953x_dt_ids,
 		.acpi_match_table = pca953x_acpi_ids,
 	},
