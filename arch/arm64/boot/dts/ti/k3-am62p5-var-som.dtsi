@@ -12,6 +12,7 @@
 #include <dt-bindings/leds/common.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/pwm/pwm.h>
+#include <dt-bindings/net/ti-dp83867.h>
 #include "k3-am62p5.dtsi"
 
 / {
@@ -143,12 +144,13 @@
 		regulator-boot-on;
 	};
 
-	vdd_phy_3v3: regulator-8 {
+	int_eth_phy_vdd: int-eth-phy-vdd {
 		compatible = "regulator-fixed";
-		regulator-name = "vdd_phy_3v3";
-		gpio = <&main_gpio0 45 GPIO_ACTIVE_HIGH>;
+		regulator-name = "int_eth_phy_vdd";
+		gpio = <&main_gpio0 46 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 		regulator-always-on;
+		regulator-boot-on;
 		status="okay";
 	};
 };
@@ -164,12 +166,12 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mdio1_pins_default>;
 	cpsw3g_phy0: ethernet-phy@4 {
-		bootph-all;
 		reg = <4>;
-		compatible = "ethernet-phy-id0283.bc30";
-		reset-gpios = <&main_gpio0 46 GPIO_ACTIVE_LOW>;
-		reset-assert-us = <10000>;
-		reset-deassert-us = <100000>;
+		compatible = "ethernet-phy-ieee802.3-c22";
+		bootph-all;
+		ti,min-output-impedance;
+		enet-phy-lane-no-swap;
+		vdd-supply = <&int_eth_phy_vdd>;
 	};
 };
 
@@ -277,7 +279,8 @@
 	main_mdio1_pins_default: main-mdio1-pins-default {
 		pinctrl-single,pins = <
 			AM62PX_IOPAD(0x0160, PIN_OUTPUT, 0) /* (F17) MDIO0_MDC */
-			AM62PX_IOPAD(0x015c, PIN_INPUT, 0) /* (F16) MDIO0_MDIO */
+			AM62PX_IOPAD(0x015c, PIN_INPUT, 0)  /* (F16) MDIO0_MDIO */
+			AM62PX_IOPAD(0x00bc, PIN_OUTPUT, 7) /* (U8)  GPIO0_46 */
 		>;
 		bootph-all;
 	};
