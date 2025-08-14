@@ -13,6 +13,7 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/pwm/pwm.h>
+#include <dt-bindings/net/ti-dp83867.h>
 #include "k3-am62p5.dtsi"
 
 / {
@@ -149,15 +150,6 @@
 		regulator-always-on;
 		regulator-boot-on;
 	};
-
-	vdd_phy_3v3: regulator-8 {
-		compatible = "regulator-fixed";
-		regulator-name = "vdd_phy_3v3";
-		gpios = <&main_gpio0 45 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
-		regulator-always-on;
-		status="okay";
-	};
 };
 
 &cpsw3g {
@@ -171,8 +163,11 @@
 	pinctrl-0 = <&main_mdio1_pins_default>;
 	cpsw3g_phy0: ethernet-phy@4 {
 		reg = <4>;
-		compatible = "ethernet-phy-id0283.bc30";
+		compatible = "ethernet-phy-ieee802.3-c22";
+		bootph-all;
+		ti,min-output-impedance;
 		reset-gpios = <&main_gpio0 46 GPIO_ACTIVE_LOW>;
+		enet-phy-lane-no-swap;
 		reset-assert-us = <10000>;
 		reset-deassert-us = <100000>;
 	};
@@ -295,6 +290,7 @@
 			AM62PX_IOPAD(0x0140, PIN_INPUT, 0) /* (C16) RGMII1_TD3 */
 			AM62PX_IOPAD(0x0130, PIN_INPUT, 0) /* (B17) RGMII1_TXC */
 			AM62PX_IOPAD(0x012c, PIN_INPUT, 0) /* (B18) RGMII1_TX_CTL */
+			AM62PX_IOPAD(0x00bc, PIN_INPUT, 7) /* (U8)  GPIO0_46 */
 		>;
 		bootph-all;
 	};
