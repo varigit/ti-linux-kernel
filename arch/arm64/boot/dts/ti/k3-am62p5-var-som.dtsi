@@ -17,12 +17,6 @@
 / {
 	compatible = "variscite,am62p-var-som", "ti,am62p5";
 
-	audio_refclk1: clk-0 {
-		#clock-cells = <0>;
-		compatible = "fixed-clock";
-		clock-frequency = <100000000>;
-	};
-
 	iw612_pwrseq: iw612_pwrseq {
 		compatible = "mmc-pwrseq-simple";
 		post-power-on-delay-ms = <100>;
@@ -183,6 +177,23 @@
 	phy-mode = "rgmii";
 	phy-handle = <&cpsw3g_phy0>;
 	status = "okay";
+};
+
+/* backport of audio_refclk1 from https://github.com/torvalds/linux/commit/6a02c9aa222ce0fff47f526686690f84b7a97f4e */
+&main_conf {
+	audio_refclk1: clock@82e4 {
+		compatible = "ti,am62-audio-refclk";
+		reg = <0x82e4 0x4>;
+		clocks = <&k3_clks 157 18>;
+		assigned-clocks = <&k3_clks 157 18>;
+		assigned-clock-parents = <&k3_clks 157 33>;
+		#clock-cells = <0>;
+	};
+};
+/* end of backport */
+
+&audio_refclk1 {
+	assigned-clock-rates = <12000000>;
 };
 
 &main_i2c2 {
