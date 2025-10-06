@@ -280,7 +280,7 @@
 		pinctrl-single,pins = <
 			AM62PX_IOPAD(0x0160, PIN_OUTPUT, 0) /* (F17) MDIO0_MDC */
 			AM62PX_IOPAD(0x015c, PIN_INPUT, 0)  /* (F16) MDIO0_MDIO */
-			AM62PX_IOPAD(0x00bc, PIN_OUTPUT, 7) /* (U8)  GPIO0_46 */
+			AM62PX_IOPAD(0x00bc, PIN_INPUT, 7)  /* (U8)  GPIO0_46 */
 		>;
 		bootph-all;
 	};
