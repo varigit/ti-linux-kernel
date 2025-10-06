@@ -147,6 +147,8 @@
 	int_eth_phy_vdd: int-eth-phy-vdd {
 		compatible = "regulator-fixed";
 		regulator-name = "int_eth_phy_vdd";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
 		gpio = <&main_gpio0 46 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 		regulator-always-on;
