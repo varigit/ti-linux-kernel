@@ -63,7 +63,7 @@
 		width-mm = <153>;
 		height-mm = <87>;
 		label = "gktw70sdae4se";
-		data-mapping = "jeida-18";
+		data-mapping = "jeida-24";
 		status = "okay";
 
 		panel-timing {
