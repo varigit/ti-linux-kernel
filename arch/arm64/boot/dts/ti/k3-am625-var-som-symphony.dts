@@ -79,6 +79,9 @@
 			hsync-active = <0>;
 			vsync-active = <0>;
 			de-active = <1>;
+
+			/* unlike most panels this panel expects pixelclk-active = <1> */
+			pixelclk-active = <1>;
 		};
 
 		ports {
