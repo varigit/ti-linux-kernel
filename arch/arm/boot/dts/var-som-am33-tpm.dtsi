@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Copyright (C) 2023 Variscite LTD - http://www.variscite.com/
+ */
+
+#include "var-som-am33.dtsi"
+
+&uart1 {
+	bluetooth {
+		status = "disabled";
+	};
+};
+
+&mmc2 {
+	status = "disabled";
+};
+
+&i2c0 {
+	status = "okay";
+
+	tpm: tpm@2e {
+		compatible = "infineon,slb9673";
+		reg = <0x2e>;
+	};
+};

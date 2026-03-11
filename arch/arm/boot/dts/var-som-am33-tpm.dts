@@ -3,5 +3,5 @@
  * Copyright (C) 2023 Variscite LTD - http://www.variscite.com/
  */
 
-#include "var-som-am33.dtsi"
+#include "var-som-am33-tpm.dtsi"
 #include "var-som-am33-customboard.dtsi"

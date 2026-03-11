@@ -71,6 +71,13 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&clkout1_pin>;
 
+	i2c0_pins: pinmux_i2c0_pins {
+		pinctrl-single,pins = <
+			AM33XX_PADCONF(AM335X_PIN_I2C0_SDA, PIN_INPUT_PULLUP, MUX_MODE0)    /* i2c0_sda.i2c0_sda */
+			AM33XX_PADCONF(AM335X_PIN_I2C0_SCL, PIN_INPUT_PULLUP, MUX_MODE0)    /* i2c0_scl.i2c0_scl */
+		>;
+	};
+
 	i2c1_pins: pinmux_i2c1_pins {
 		pinctrl-single,pins = <
 			AM33XX_PADCONF(AM335X_PIN_SPI0_D1, PIN_INPUT_PULLUP, MUX_MODE2)		/* spi0_d1.i2c1_sda */
@@ -266,6 +273,13 @@
 		compatible = "ti,wl1831-st";
 		enable-gpios = <&gpio3 9 GPIO_ACTIVE_HIGH>;
 	};
+};
+
+&i2c0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pins>;
+	clock-frequency = <400000>;
+	status = "disabled";
 };
 
 &i2c1 {
