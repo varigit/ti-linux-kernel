@@ -920,22 +920,25 @@ static int k3_r5_rproc_stop(struct rproc *rproc)
 			return 0;
 		}
 
-		reinit_completion(&kproc->shut_comp);
-		ret = mbox_send_message(kproc->mbox, (void *)msg);
-		if (ret < 0) {
-			dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
-			return ret;
-		}
+		if (rproc->table_sz > 0) {
 
-		ret = wait_for_completion_timeout(&kproc->shut_comp, to);
-		if (ret == 0) {
-			dev_err(dev, "%s: timeout waiting for rproc completion event\n", __func__);
-			return -EBUSY;
-		}
+			reinit_completion(&kproc->shut_comp);
+			ret = mbox_send_message(kproc->mbox, (void *)msg);
+			if (ret < 0) {
+				dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
+				return ret;
+			}
 
-		ret = readx_poll_timeout(is_core_in_wfi, core, stat, stat, 200, 2000);
-		if (ret)
-			goto out;
+			ret = wait_for_completion_timeout(&kproc->shut_comp, to);
+			if (ret == 0) {
+				dev_err(dev, "%s: timeout waiting for rproc completion event\n", __func__);
+				return -EBUSY;
+			}
+
+			ret = readx_poll_timeout(is_core_in_wfi, core, stat, stat, 200, 2000);
+			if (ret)
+				goto out;
+		}
 
 		ret = k3_r5_core_halt(core);
 		if (ret)
