@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * VAR-SOM-AM62P
+ *
+ * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
+ * Copyright (C) 2026 Variscite Ltd. - https://www.variscite.com/
+ */
+
+/dts-v1/;
+
+#include "k3-am62p5-var-som-symphony.dts"
+
+/ {
+	model = "Variscite VAR-SOM-AM62P on Symphony-Board with Cortex-R5F";
+
+};
+
+&main_uart2 {
+	/* Main UART2 is used by Cortex-R5F firmwares */
+	status = "disabled";
+};
+
+&main_spi2 {
+	status = "disabled";
+};
