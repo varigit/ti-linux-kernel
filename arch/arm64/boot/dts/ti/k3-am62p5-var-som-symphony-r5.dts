@@ -23,3 +23,15 @@
 &main_spi2 {
 	status = "disabled";
 };
+
+&mailbox0_cluster1 {
+	status = "okay";
+};
+
+&mcu_r5fss0 {
+	status = "okay";
+};
+
+&mcu_r5fss0_core0 {
+	status = "okay";
+};

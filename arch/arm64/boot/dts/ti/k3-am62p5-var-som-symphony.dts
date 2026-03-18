@@ -239,7 +239,7 @@
 };
 
 &mailbox0_cluster1 {
-	status = "okay";
+	status = "disabled";
 	mbox_mcu_r5_0: mbox-mcu-r5-0 {
 		ti,mbox-rx = <0 0 0>;
 		ti,mbox-tx = <1 0 0>;
@@ -581,10 +581,11 @@
 };
 
 &mcu_r5fss0 {
-	status = "okay";
+	status = "disabled";
 };
 
 &mcu_r5fss0_core0 {
+	status = "disabled";
 	mboxes = <&mailbox0_cluster1 &mbox_mcu_r5_0>;
 	memory-region = <&mcu_r5fss0_core0_dma_memory_region>,
 			<&mcu_r5fss0_core0_memory_region>;
