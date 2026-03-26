@@ -5,3 +5,7 @@
 
 #include "var-som-am33-tpm.dtsi"
 #include "var-som-am33-customboard.dtsi"
+
+&i2c1 {
+	/delete-node/ edt_ft5x06_ts@38;
+};

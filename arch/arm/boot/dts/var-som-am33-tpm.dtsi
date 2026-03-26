@@ -5,6 +5,8 @@
 
 #include "var-som-am33.dtsi"
 
+/delete-node/ &wlan_en_reg;
+
 &uart1 {
 	bluetooth {
 		status = "disabled";
@@ -12,14 +14,35 @@
 };
 
 &mmc2 {
+	/delete-property/ vmmc-supply;
+	/delete-property/ pinctrl-0;
+	/delete-property/ pinctrl-1;
 	status = "disabled";
 };
 
-&i2c0 {
-	status = "okay";
+&am33xx_pinmux {
+	tpm_i2c0_pins: pinmux_tpm_i2c0_pins {
+		pinctrl-single,pins = <
+			AM33XX_PADCONF(AM335X_PIN_I2C0_SDA, PIN_INPUT_PULLUP, MUX_MODE0)    /* i2c0_sda.i2c0_sda */
+			AM33XX_PADCONF(AM335X_PIN_I2C0_SCL, PIN_INPUT_PULLUP, MUX_MODE0)    /* i2c0_scl.i2c0_scl */
+			AM33XX_PADCONF(AM335X_PIN_MCASP0_AHCLKX, PIN_INPUT_PULLUP, MUX_MODE7) /* mcasp0_ahclkx.gpio3_21 */
+		>;
+	};
 
+	/delete-node/ pinmux_wlan_pins_default;
+	/delete-node/ pinmux_wlan_pins_sleep;
+};
+
+&i2c0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&tpm_i2c0_pins>;
+
+	#address-cells = <1>;
+	status = "okay";
+	clock-frequency = <400000>;
 	tpm: tpm@2e {
 		compatible = "infineon,slb9673";
 		reg = <0x2e>;
 	};
 };
+
