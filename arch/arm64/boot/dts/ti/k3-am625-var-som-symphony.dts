@@ -630,7 +630,7 @@
 };
 
 &mcu_m4fss {
-	status="okay";
+	status="disabled";
 	mboxes = <&mailbox0_cluster0 &mbox_m4_0>;
 	memory-region = <&mcu_m4fss_dma_memory_region>,
 			<&mcu_m4fss_memory_region>;
