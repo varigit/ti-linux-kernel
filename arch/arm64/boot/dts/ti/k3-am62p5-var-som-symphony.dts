@@ -233,7 +233,7 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
-	/* VP1: Output to OLDI */
+	/* VP1: Output to OLDI0 */
 	port@0 {
 		reg = <0>;
 		#address-cells = <1>;

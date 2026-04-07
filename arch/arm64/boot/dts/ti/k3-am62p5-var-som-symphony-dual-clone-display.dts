@@ -1,0 +1,94 @@
+
+// Take the k3-am62p5-var-som-symphony as basis
+#include "k3-am62p5-var-som-symphony.dts"
+
+&{/} {
+	cloned-display {
+		compatible = "panel-lvds";
+		backlight = <&backlight>;
+		width-mm = <153>;
+		height-mm = <87>;
+		label = "gktw70sdae4se";
+		data-mapping = "jeida-24";
+		status = "okay";
+
+		panel-timing {
+			clock-frequency = <30000000>;
+			hactive = <800>;
+			vactive = <480>;
+			hback-porch = <40>;
+			hfront-porch = <40>;
+			vback-porch = <29>;
+			vfront-porch = <13>;
+			hsync-len = <48>;
+			vsync-len = <3>;
+			hsync-active = <0>;
+			vsync-active = <0>;
+			de-active = <1>;
+
+			/* unlike most panels this panel expects pixelclk-active = <1> */
+			pixelclk-active = <1>;
+		};
+
+		port@0 {
+			lcd_in1: endpoint {
+				remote-endpoint = <&oldi1_dss0_out>;
+			};
+		};
+	};
+};
+
+// Copy over dss0_ports completely
+&dss0_ports {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	/* VP1: Output to OLDI */
+	port@0 {
+		reg = <0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		dss0_dpi0_out0: endpoint@0 {
+			reg = <0>;
+			remote-endpoint = <&oldi0_dss0_in>;
+		};
+
+		dss0_dpi0_out1: endpoint@1 {
+			reg = <1>;
+			remote-endpoint = <&oldi1_dss0_in>;
+		};
+	};
+};
+
+// connect OLDI1 to 2nd display
+&oldi1_dss0_ports {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	port@0 {
+		reg = <0>;
+		oldi1_dss0_in: endpoint {
+			remote-endpoint = <&dss0_dpi0_out1>;
+		};
+	};
+
+	port@1 {
+		reg = <1>;
+		oldi1_dss0_out: endpoint {
+			remote-endpoint = <&lcd_in1>;
+		};
+	};
+};
+
+// set companion OLDI
+&oldi0_dss0 {
+	status = "okay";
+	ti,companion-oldi = <&oldi1_dss0>;
+};
+
+// activate OLDI1
+&oldi1_dss0 {
+	status = "okay";
+	ti,secondary-oldi;
+};
+
