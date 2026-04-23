@@ -281,6 +281,10 @@
 		clocks = <&clk_ov5640_fixed>;
 		clock-names = "xclk";
 
+		DOVDD-supply = <&ov5640_buf_en>;
+		AVDD-supply = <&ov5640_buf_en>;
+		DVDD-supply = <&ov5640_buf_en>;
+
 		powerdown-gpios = <&main_gpio0 10 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&main_gpio0 22 GPIO_ACTIVE_LOW>;
 
