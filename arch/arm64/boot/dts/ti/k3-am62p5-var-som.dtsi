@@ -200,6 +200,15 @@
 	assigned-clock-rates = <12000000>;
 };
 
+&main_gpio0 {
+	bt_en_hog: bt-en-hog {
+		gpio-hog;
+		gpios = <60 GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "bt_en";
+	};
+};
+
 &main_i2c2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_i2c2_pins_default>;
