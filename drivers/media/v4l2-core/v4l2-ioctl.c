@@ -1402,6 +1402,17 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
 	case V4L2_PIX_FMT_IPU3_SGBRG10: descr = "10-bit bayer GBRG IPU3 Packed"; break;
 	case V4L2_PIX_FMT_IPU3_SGRBG10: descr = "10-bit bayer GRBG IPU3 Packed"; break;
 	case V4L2_PIX_FMT_IPU3_SRGGB10: descr = "10-bit bayer RGGB IPU3 Packed"; break;
+	/* 4x4 RGB-IR Bayer 10-bit (V4L2_PIX_FMT_S{RGGI,GRIG,BGGI,GBIG,GIRG,
+	 * IGGR,GIBG,IGGB}10 from <linux/videodev2.h> 5.16+, not in this GKI
+	 * snapshot — spell out via v4l2_fourcc()). */
+	case v4l2_fourcc('R', 'G', 'I', '0'):	descr = "10-bit Bayer RGB-IR RGBG/GIrGIr"; break;
+	case v4l2_fourcc('G', 'R', 'I', '0'):	descr = "10-bit Bayer RGB-IR GRGB/IrGIrG"; break;
+	case v4l2_fourcc('B', 'G', 'I', '0'):	descr = "10-bit Bayer RGB-IR BGRG/GIrGIr"; break;
+	case v4l2_fourcc('G', 'B', 'I', '0'):	descr = "10-bit Bayer RGB-IR GBGR/IrGIrG"; break;
+	case v4l2_fourcc('G', 'I', 'R', '0'):	descr = "10-bit Bayer RGB-IR GIrGIr/RGBG"; break;
+	case v4l2_fourcc('I', 'G', 'R', '0'):	descr = "10-bit Bayer RGB-IR IrGIrG/GRGB"; break;
+	case v4l2_fourcc('G', 'I', 'B', '0'):	descr = "10-bit Bayer RGB-IR GIrGIr/BGRG"; break;
+	case v4l2_fourcc('I', 'G', 'B', '0'):	descr = "10-bit Bayer RGB-IR IrGIrG/GBGR"; break;
 	case V4L2_PIX_FMT_SBGGR10ALAW8:	descr = "8-bit Bayer BGBG/GRGR (A-law)"; break;
 	case V4L2_PIX_FMT_SGBRG10ALAW8:	descr = "8-bit Bayer GBGB/RGRG (A-law)"; break;
 	case V4L2_PIX_FMT_SGRBG10ALAW8:	descr = "8-bit Bayer GRGR/BGBG (A-law)"; break;
