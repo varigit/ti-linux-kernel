@@ -95,6 +95,14 @@
 			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
 			no-map;
 		};
+
+		/* IMG gralloc routes HW_VIDEO_ENCODER allocs to "carveout_video"
+		 * (dma-heap-carveout driver names heap "carveout_<node>"). */
+		carveout_video: video {
+			compatible = "dma-heap-carveout";
+			reg = <0x00 0xa0000000 0x00 0x29000000>;
+			no-map;
+		};
 	};
 
 	sound-wm8904 {
@@ -467,4 +475,8 @@
 
 &usbss1 {
 	ti,vbus-divider;
+};
+
+&vpu {
+	ti,dma-heap-name = "carveout_video";
 };
