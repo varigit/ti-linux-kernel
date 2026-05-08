@@ -504,8 +504,8 @@
 
 	main_uart0_pins_default: main-uart0-default-pins {
 		pinctrl-single,pins = <
-			AM62PX_IOPAD(0x1c8, PIN_INPUT, 0)	/* (A22) UART0_RXD */
-			AM62PX_IOPAD(0x1cc, PIN_OUTPUT, 0)	/* (B22) UART0_TXD */
+			AM62PX_IOPAD(0x1c8, PIN_INPUT, 0) /* (A22) UART0_RXD, change muxmode from 0 to 7 to deactivate Debug UART RXD */
+			AM62PX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (B22) UART0_TXD */
 		>;
 		bootph-all;
 	};
