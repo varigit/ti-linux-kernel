@@ -199,10 +199,7 @@ static void __omap8250_set_mctrl(struct uart_port *port, unsigned int mctrl)
 
 static void omap8250_set_mctrl(struct uart_port *port, unsigned int mctrl)
 {
-	int err;
-
-	err = pm_runtime_resume_and_get(port->dev);
-	if (err)
+	if (pm_runtime_get_if_active(port->dev) <= 0)
 		return;
 
 	__omap8250_set_mctrl(port, mctrl);
