@@ -1363,17 +1363,28 @@ static void autoconfig_irq(struct uart_8250_port *up)
 static void serial8250_stop_rx(struct uart_port *port)
 {
 	struct uart_8250_port *up = up_to_u8250p(port);
+	bool rpm_active = true;
 
 	/* Port locked to synchronize UART_IER access against the console. */
 	lockdep_assert_held_once(&port->lock);
 
-	serial8250_rpm_get(up);
+	/*
+	 * Called under port->lock from uart_tty_port_shutdown — RPM-capable
+	 * ports must use the non-sleeping helper. If suspended skip MMIO;
+	 * up->ier shadow is replayed on next runtime resume.
+	 */
+	if (up->capabilities & UART_CAP_RPM)
+		rpm_active = pm_runtime_get_if_active(port->dev) > 0;
 
 	up->ier &= ~(UART_IER_RLSI | UART_IER_RDI);
 	up->port.read_status_mask &= ~UART_LSR_DR;
-	serial_port_out(port, UART_IER, up->ier);
+	if (rpm_active)
+		serial_port_out(port, UART_IER, up->ier);
 
-	serial8250_rpm_put(up);
+	if ((up->capabilities & UART_CAP_RPM) && rpm_active) {
+		pm_runtime_mark_last_busy(port->dev);
+		pm_runtime_put_autosuspend(port->dev);
+	}
 }
 
 /**
