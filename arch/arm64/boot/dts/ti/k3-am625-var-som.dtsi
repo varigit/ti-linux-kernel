@@ -483,6 +483,7 @@
 	status = "okay";
 	ti,fails-without-test-cd;
 	non-removable;
+	cap-power-off-card;
 
 	brcmf: bcrmf@1 {
 		reg = <1>;
