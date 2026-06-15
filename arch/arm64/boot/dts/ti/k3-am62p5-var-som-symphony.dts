@@ -208,7 +208,8 @@
 
 	cpsw3g_phy1: ethernet-phy@5 {
 		reg = <5>;
-		compatible = "ethernet-phy-id0283.bc30";
+		compatible = "ethernet-phy-ieee802.3-c22";
+		ti,min-output-impedance;
 		reset-gpios = <&pca9534 5 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <10000>;
 		reset-deassert-us = <100000>;
