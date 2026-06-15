@@ -433,7 +433,6 @@
 	status = "okay";
 	ti,driver-strength-ohm = <50>;
 	mmc-pwrseq = <&emmc_pwrseq>;
-	disable-wp;
 	bootph-all;
 };
 
@@ -442,7 +441,6 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mmc2_pins_default>, <&pinctrl_wifi>;
 	bus-width = <4>;
-	disable-wp;
 	non-removable;
 	keep-power-in-suspend;
 	mmc-pwrseq = <&iw612_pwrseq>;
