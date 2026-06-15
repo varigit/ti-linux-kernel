@@ -433,6 +433,7 @@
 	status = "okay";
 	ti,driver-strength-ohm = <50>;
 	mmc-pwrseq = <&emmc_pwrseq>;
+	non-removable;
 	bootph-all;
 };
 
