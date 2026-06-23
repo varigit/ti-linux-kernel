@@ -453,6 +453,7 @@
 	ti,driver-strength-ohm = <50>;
 	mmc-pwrseq = <&emmc_pwrseq>;
 	disable-wp;
+	non-removable;
 	bootph-all;
 };
 
