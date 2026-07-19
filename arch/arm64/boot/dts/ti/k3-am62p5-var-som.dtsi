@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * VAR-SOM-AM62
+ * VAR-SOM-AM62P
  *
  * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
- * Copyright (C) 2024-2025 Variscite Ltd. - https://www.variscite.com/
+ * Copyright (C) 2024-2026 Variscite Ltd. - https://www.variscite.com/
  */
 
 /dts-v1/;
@@ -246,11 +246,20 @@
 	status = "okay";
 };
 
+&main_gpio0 {
+	bootph-all;
+};
+
+&main_gpio1 {
+	bootph-all;
+};
+
 &main_pmx0 {
 	emmc_pwrseq_pins: pinmux_emmc_pwrseq_pins {
 		pinctrl-single,pins = <
 			AM62PX_IOPAD(0x00c8, PIN_OUTPUT, 7) /* (AB23) VOUT0_DATA4.GPIO0_49 */
 		>;
+		bootph-all;
 	};
 
 	main_i2c2_pins_default: main-i2c2-default-pins {

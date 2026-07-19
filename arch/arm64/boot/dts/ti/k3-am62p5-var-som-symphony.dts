@@ -227,6 +227,7 @@
 };
 
 &dss0 {
+	bootph-all;
 	status = "okay";
 };
 
@@ -604,6 +605,7 @@
 &main_uart1 {
 	/* Main UART1 is used by TIFS firmware */
 	status = "reserved";
+	bootph-all;
 };
 
 &main_uart2 {
@@ -639,6 +641,10 @@
 
 &oldi0_dss0 {
 	status = "okay";
+};
+
+&dss_oldi_io_ctrl {
+	bootph-all;
 };
 
 &oldi0_dss0_ports {
@@ -740,4 +746,5 @@
 &wkup_uart0 {
 	/* WKUP UART0 is used by DM firmware */
 	status = "reserved";
+	bootph-all;
 };
