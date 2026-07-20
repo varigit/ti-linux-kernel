@@ -387,8 +387,10 @@
   device_find_child_by_name
   device_for_each_child
   device_for_each_child_reverse
+  device_get_child_node_count
   device_get_match_data
   device_get_named_child_node
+  device_get_next_child_node
   device_initialize
   device_is_bound
   device_link_add
@@ -458,6 +460,7 @@
   devm_drm_of_get_bridge
   devm_drm_panel_bridge_add
   devm_free_irq
+  devm_fwnode_gpiod_get_index
   devm_get_clk_from_child
   devm_gpiochip_add_data_with_key
   devm_gpiod_get
@@ -465,6 +468,7 @@
   devm_gpiod_get_index
   devm_gpiod_get_index_optional
   devm_gpiod_get_optional
+  devm_gpio_request_one
   devm_hwrng_register
   devm_hwspin_lock_register
   devm_iio_device_alloc
@@ -497,6 +501,7 @@
   devm_phy_optional_get
   devm_phy_put
   devm_pinctrl_get
+  devm_pinctrl_put
   devm_pinctrl_register
   devm_platform_get_and_ioremap_resource
   devm_platform_ioremap_resource
@@ -957,6 +962,7 @@
   fwnode_graph_get_next_endpoint
   fwnode_handle_get
   fwnode_property_match_string
+  fwnode_property_present
   fwnode_property_read_string
   fwnode_property_read_u32_array
   fwnode_property_read_u8_array
@@ -1044,6 +1050,7 @@
   gpiod_set_value
   gpiod_set_value_cansleep
   gpiod_to_irq
+  gpio_to_desc
   gre_add_protocol
   gre_del_protocol
   gro_cells_destroy
@@ -1392,6 +1399,7 @@
   __kvmalloc_node_noprof
   kvm_arch_ptp_get_crosststamp
   kvm_arm_hyp_service_available
+  led_init_default_state_get
   led_trigger_event
   led_trigger_register
   led_trigger_unregister
