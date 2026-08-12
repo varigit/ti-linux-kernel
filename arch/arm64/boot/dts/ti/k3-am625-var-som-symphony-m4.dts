@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * VAR-SOM-AM62
+ *
+ * Copyright (C) 2026 Variscite Ltd. - https://www.variscite.com/
+ */
+
+/dts-v1/;
+
+#include "k3-am625-var-som-symphony.dts"
+
+/ {
+	model = "Variscite VAR-SOM-AM62 on Symphony-Board with Cortex-M4F";
+};
+
+&main_uart2 {
+	/* Main UART2 is used by Cortex-M4F firmwares */
+	status = "disabled";
+};
+
+&mcu_m4fss {
+	status="okay";
+};
+
+&main_spi2 {
+	status = "disabled";
+};
+
+&wkup_r5fss0 {
+	status = "okay";
+};
+
+&wkup_r5fss0_core0 {
+	status="okay";
+};
