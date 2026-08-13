@@ -110,8 +110,7 @@
 		simple-audio-card,bitclock-master = <&dailink_master>;
 		simple-audio-card,format = "dsp_b";
 		simple-audio-card,frame-master = <&dailink_master>;
-		/* Prefix must be "AM62x" — TI's audio HAL matches by it. */
-		simple-audio-card,name = "AM62x-wm8904";
+		simple-audio-card,name = "wm8904-audio";
 		simple-audio-card,routing =
 			"Headphone Jack", "HPOUTL",
 			"Headphone Jack", "HPOUTR",
