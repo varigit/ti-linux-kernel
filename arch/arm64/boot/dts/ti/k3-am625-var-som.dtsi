@@ -112,6 +112,40 @@
 		clock-output-names = "osc_32k";
 	};
 
+	reg_bt_buf: reg-bt-buf {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&bt_buf_pins_default>;
+		regulator-name = "BT_BUF";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&main_gpio0 53 GPIO_ACTIVE_LOW>;
+	};
+
+	reg_wifi_vmmc: reg-wifi-mmc {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_pwr_pins_default>;
+		regulator-name = "WIFI_PWR";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&main_gpio0 54 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
+	reg_wifi_en: reg-wifi-en {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_en_pins_default>;
+		regulator-name = "WIFI_EN";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&main_gpio0 59 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
 	vcc_3v3: vcc-3v3 {
 		bootph-all;
 		compatible = "regulator-fixed";
@@ -131,17 +165,6 @@
 		vin-supply = <&vcc_3v3>;
 		regulator-always-on;
 		regulator-boot-on;
-	};
-
-	vdd_mmc2: vdd-wifi {
-		pinctrl-names = "default";
-		pinctrl-0 = <&vdd_mmc2_pins_default>;
-		compatible = "regulator-fixed";
-		regulator-name = "wifi_power";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		regulator-always-on;
-		status="okay";
 	};
 
 	vdd_phy_3v3: regulator-8 {
@@ -271,6 +294,18 @@
 };
 
 &main_pmx0 {
+	bt_buf_pins_default: bt-buf-default-pins {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x00d8, PIN_OUTPUT, 7) /* (V21) VOUT0_DATA8.GPIO0_53  - BT_BUF */
+		>;
+	};
+
+	bt_en_pins_default: bt-en-default-pins {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x00f4, PIN_OUTPUT, 7) /* (AA21) VOUT0_DATA15.GPIO0_60 - BT_EN */
+		>;
+	};
+
 	main_i2c2_pins_default: main-i2c2-default-pins {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x0b0, PIN_INPUT_PULLUP, 1) /* (K22) GPMC0_CSn2.I2C2_SCL */
@@ -299,15 +334,6 @@
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x160, PIN_INPUT, 0) /* (AD24) MDIO0_MDC */
 			AM62X_IOPAD(0x15c, PIN_INPUT, 0) /* (AB22) MDIO0_MDIO */
-		>;
-	};
-
-	vdd_mmc2_pins_default: vdd-mmc2-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x00d8, PIN_INPUT, 7) /* (V21) VOUT0_DATA8.GPIO0_53 */
-			AM62X_IOPAD(0x00dc, PIN_INPUT, 7) /* (W21) VOUT0_DATA9.GPIO0_54 */
-			AM62X_IOPAD(0x00f0, PIN_INPUT, 7) /* (Y22) VOUT0_DATA14.GPIO0_59 */
-			AM62X_IOPAD(0x00f4, PIN_INPUT, 7) /* (AA21) VOUT0_DATA15.GPIO0_60 */
 		>;
 	};
 
@@ -388,6 +414,18 @@
 			AM62X_IOPAD(0x00b8, PIN_INPUT, 7) /* (U22) VOUT0_DATA0.GPIO0_45 */
 		>;
 	};
+
+	wifi_en_pins_default: wifi-en-default-pins {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x00f0, PIN_OUTPUT, 7) /* (Y22) VOUT0_DATA14.GPIO0_59 - WIFI_EN */
+		>;
+	};
+
+	wifi_pwr_pins_default: wifi-pwr-default-pins {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x00dc, PIN_OUTPUT, 7) /* (W21) VOUT0_DATA9.GPIO0_54 - WIFI_3V3 */
+		>;
+	};
 };
 
 &main_spi0 {
@@ -430,6 +468,19 @@
 	dmas = <&main_pktdma 0x4405 0>, <&main_pktdma 0xc405 0>;
 	dma-names = "rx", "tx";
 	status = "okay";
+
+	bluetooth {
+		compatible = "brcm,bcm4329-bt";
+		pinctrl-names = "default";
+		pinctrl-0 = <&bt_en_pins_default>;
+		clocks = <&osc_32k>;
+		clock-names = "txco";
+		max-speed = <3000000>;
+		vbat-supply = <&reg_bt_buf>;
+		vddio-supply = <&reg_wifi_vmmc>;
+		shutdown-gpios = <&main_gpio0 60 GPIO_ACTIVE_HIGH>;
+		brcm,bt-pcm-int-params = [01 00 00 00 00];
+	};
 };
 
 &mcasp1 {
@@ -475,7 +526,7 @@
 	#size-cells = <0>;
 	assigned-clocks = <&k3_clks 157 158>; /* wkup_clkout_sel_out0 */
 	assigned-clock-parents = <&k3_clks 157 164>; /* clk_32k_rc_sel_out0 */
-	vmmc-supply = <&vdd_mmc2>;
+	vmmc-supply = <&reg_wifi_vmmc>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mmc2_pins_default>, <&wkup_clkout0_pins_default>;
 	bus-width = <4>;
