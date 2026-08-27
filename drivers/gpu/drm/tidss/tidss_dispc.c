@@ -581,6 +581,10 @@ struct dispc_device {
 
 	// WA for erratum i2097: OVR Layer Disable May Cause Sync Lost.
 	u32 pending_disable_layers[TIDSS_MAX_PORTS];
+
+	/* Per-plane enable/format state, see dispc_plane_repair_attrs() */
+	u32 wa_plane_fmt[TIDSS_MAX_PLANES];
+	bool wa_plane_enabled[TIDSS_MAX_PLANES];
 };
 
 static void dispc_write(struct dispc_device *dispc, u16 reg, u32 val)
@@ -1430,8 +1434,31 @@ bool dispc_vp_go_busy(struct dispc_device *dispc, u32 hw_videoport)
 	return VP_REG_GET(dispc, hw_videoport, DISPC_VP_CONTROL, 5, 5);
 }
 
+/* After deep sleep the hardware can lose the VID_ATTRIBUTES writes issued
+ * when a plane is enabled. Rewriting them right before the GO bit sticks.
+ */
+static void dispc_plane_repair_attrs(struct dispc_device *dispc)
+{
+	unsigned int i;
+
+	for (i = 0; i < dispc->feat->num_planes; ++i) {
+		if (!dispc->wa_plane_enabled[i])
+			continue;
+
+		if (dispc_vid_read(dispc, i, DISPC_VID_ATTRIBUTES) & BIT(0))
+			continue;
+
+		dev_warn(dispc->dev, "plane %u attributes lost, rewriting\n", i);
+		VID_REG_FLD_MOD(dispc, i, DISPC_VID_ATTRIBUTES,
+				dispc->wa_plane_fmt[i], 6, 1);
+		VID_REG_FLD_MOD(dispc, i, DISPC_VID_ATTRIBUTES, 1, 0, 0);
+	}
+}
+
 void dispc_vp_go(struct dispc_device *dispc, u32 hw_videoport)
 {
+	dispc_plane_repair_attrs(dispc);
+
 	WARN_ON(VP_REG_GET(dispc, hw_videoport, DISPC_VP_CONTROL, 5, 5));
 
 	if (dispc->errata.i2097 &&
@@ -2370,6 +2397,8 @@ static void dispc_plane_set_pixel_format(struct dispc_device *dispc,
 
 	for (i = 0; i < ARRAY_SIZE(dispc_color_formats); ++i) {
 		if (dispc_color_formats[i].fourcc == fourcc) {
+			dispc->wa_plane_fmt[hw_plane] =
+				dispc_color_formats[i].dss_code;
 			VID_REG_FLD_MOD(dispc, hw_plane, DISPC_VID_ATTRIBUTES,
 					dispc_color_formats[i].dss_code,
 					6, 1);
@@ -2558,6 +2587,7 @@ void dispc_plane_setup(struct dispc_device *dispc, u32 hw_plane,
 
 void dispc_plane_enable(struct dispc_device *dispc, u32 hw_plane, bool enable)
 {
+	dispc->wa_plane_enabled[hw_plane] = enable;
 	VID_REG_FLD_MOD(dispc, hw_plane, DISPC_VID_ATTRIBUTES, !!enable, 0, 0);
 }
 
