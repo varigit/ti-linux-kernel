@@ -26,6 +26,7 @@
 #include <linux/dmi.h>
 #include <linux/pm_runtime.h>
 #include <linux/serdev.h>
+#include <linux/workqueue.h>
 
 #include <net/bluetooth/bluetooth.h>
 #include <net/bluetooth/hci_core.h>
@@ -149,6 +150,9 @@ struct bcm_device {
 	bool			use_autobaud_mode;
 	u8			pcm_int_params[5];
 	u32			max_autobaud_speed;
+
+	/* Re-runs setup after system resume, see bcm_rebind_work() */
+	struct work_struct	rebind_work;
 };
 
 /* generic bcm uart resources */
@@ -816,6 +820,20 @@ static int bcm_resume_device(struct device *dev)
 }
 #endif
 
+static void bcm_rebind_work(struct work_struct *work)
+{
+	struct bcm_device *bdev = container_of(work, struct bcm_device,
+					       rebind_work);
+	struct device *dev = bdev->dev;
+
+	dev_info(dev, "reinitializing controller after system resume\n");
+
+	device_release_driver(dev);
+
+	if (device_attach(dev) < 0)
+		dev_err(dev, "controller rebind failed\n");
+}
+
 #ifdef CONFIG_PM_SLEEP
 /* suspend callback */
 static int bcm_suspend(struct device *dev)
@@ -885,6 +903,10 @@ unlock:
 		pm_runtime_set_active(dev);
 		pm_runtime_enable(dev);
 	}
+
+	/* Recover a chip that lost its firmware during system suspend */
+	if (bdev->hu && bdev->hu->serdev && bdev->shutdown)
+		schedule_work(&bdev->rebind_work);
 
 	return 0;
 }
@@ -1566,6 +1588,8 @@ static int bcm_serdev_probe(struct serdev_device *serdev)
 			bcmdev->oper_speed = data->max_speed;
 	}
 
+	INIT_WORK(&bcmdev->rebind_work, bcm_rebind_work);
+
 	return hci_uart_register_device(&bcmdev->serdev_hu, &bcm_proto);
 }
 
@@ -1573,6 +1597,7 @@ static void bcm_serdev_remove(struct serdev_device *serdev)
 {
 	struct bcm_device *bcmdev = serdev_device_get_drvdata(serdev);
 
+	cancel_work(&bcmdev->rebind_work);
 	hci_uart_unregister_device(&bcmdev->serdev_hu);
 }
 
