@@ -404,6 +404,7 @@
   device_property_present
   device_property_read_string
   device_property_read_string_array
+  device_property_read_u16_array
   device_property_read_u32_array
   device_property_read_u8_array
   device_register
@@ -1043,6 +1044,7 @@
   gpiod_direction_input
   gpiod_direction_output
   gpiod_get_optional
+  gpiod_get_value
   gpiod_get_value_cansleep
   gpiod_set_array_value_cansleep
   gpiod_set_consumer_name
